@@ -1,4 +1,7 @@
 #!/bin/bash
+### UPDATE SYSTEM ###
+apt update
+apt upgrade -y
 
 ### USER CONFIG ###
 
