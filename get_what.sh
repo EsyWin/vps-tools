@@ -1,20 +1,35 @@
 #!/bin/bash
 # install dependencies
-sudo apt-get install build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git zlib1g-dev wget bsdmainutils automake curl
+apt -y install openssl build-essential git pkg-config libc6-dev m4 g++-multilib autoconf \
+                   libtool ncurses-dev unzip git python python-zmq zlib1g-dev wget \
+                   libcurl4-openssl-dev bsdmainutils automake curl
 # create user for wallet
-useradd -m -d /home/veruscoin -s /bin/bash veruscoin
+useradd -m -d /home/whatcoin -s /bin/bash whatcoin
 # login as user
-{
-git clone https://github.com/EsyWin/WhatCoin;
-cd WhatCoin;
+su - whatcoin
+# clone repo
+git clone https://github.com/EsyWin/WhatCoin
+# cd into
+cd WhatCoin
+# fetch params
 ./zcutil/fetch-params.sh;
-./zcutil/build.sh -j$(expr $(nproc) -1);
-mkdir ~/bin;
-cp src/whatd src/what src/what-tx ~/bin;
-strip ~/bin/what*;
-mkdir -p ~/.komodo/WHAT;
-cd ~/.komodo/WHAT;
-
+# build
+./zcutil/build.sh -j$(expr $(nproc) -1)
+# create binary directory
+mkdir ~/bin
+# copy
+cp src/verusd src/verus src/verus-tx ~/bin
+strip ~/bin/what*
+# create data dir
+mkdir -p ~/.komodo/WHAT
+cd ~/.komodo/WHAT
+# download bootstrap
+wget https://bootstrap.veruscoin.io/VRSC-bootstrap.tar.gz
+tar xf VRSC-bootstrap.tar.gz
+rm VRSC-bootstrap.tar.gz
+# create secure rpcpassword
+RPC_PASSWORD=$(openssl rand 60 | openssl base64 -A)
+# create config file
 cat << EOF >  ~/.komodo/WHAT/WHAT.conf
 server=1
 listen=1
@@ -41,7 +56,7 @@ bind=::
 
 # rpc settings
 rpcuser=whatcoin
-rpcpassword=
+rpcpassword=${RPC_PASSWORD}
 rpcport=31337
 rpcthreads=256
 rpcworkqueue=1024
@@ -56,9 +71,9 @@ mint=1
 
 # addnodes
 seednode=185.25.48.236:27485
+seednode=185.25.48.236:27485
 EOF;
-whatd -daemon &;
-echo '#!/bin/bash\nOLDPWD="$(pwd)"\ncd /home/$USER/.komodo/WHAT\n/home/whatcoin/bin/whatd ${@}\ncd "${OLDPWD}' >  /home/$USER/bin/whatcoind;
-echo '#!/bin/bash\n/home/whatcoin/bin/verus ${@}' > /home/$USER/bin/whatcoin-cli;
-chmod +x /home/$USER/bin/whatcoin*;
-} | su - veruscoin
+verusd -daemon &
+echo '#!/bin/bash\nOLDPWD="$(pwd)"\ncd /home/$USER/.komodo/WHAT\n/home/whatcoin/bin/verusd ${@}\ncd "${OLDPWD}' >  /home/$USER/bin/verusd;
+echo '#!/bin/bash\n/home/whatcoin/bin/verus ${@}' > /home/$USER/bin/verus-cli;
+chmod +x /home/$USER/bin/verus*;
