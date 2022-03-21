@@ -10,7 +10,7 @@ iwctl --passphrase passphrase station wlan0 connect SSID
 
 ```shell
 pacman -S curl
-curl https://raw.githubusercontent.com/esywin/vps-tools/[script.sh] | bash
+curl https://raw.githubusercontent.com/esywin/vps-tools/btrfs/arch_install.sh | bash
 ```
 
 I'll merge scripts and invoke them altogether as I move further.
