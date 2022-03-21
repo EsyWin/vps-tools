@@ -15,7 +15,7 @@ timedatectl set-ntp true
     echo '';
     echo '+2G';
     echo '8200';
-        echo 'n';
+    echo 'n';
     echo '';
     echo '';
     echo '';
@@ -54,6 +54,8 @@ mount -o noatime,compress=lzo,subvol=@srv /dev/sda3/ /mnt/srv
 mount -o noatime,compress=lzo,subvol=@snapshots /dev/sda3/ /mnt/.snapshots
 # mount efi partition
 mount /dev/sda1 /mnt/boot
+# sync pacman
+pacman -Syyy
 # install base packages
 pacstrap /mnt base linux linux-firmware nano snapper curl git -y
 # genfstab
