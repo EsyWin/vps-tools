@@ -23,3 +23,4 @@ timedatectl set-ntp true
     echo 'w';
     echo 'Y';
 } | gdisk /dev/sda
+# 
