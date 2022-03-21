@@ -23,4 +23,10 @@ timedatectl set-ntp true
     echo 'w';
     echo 'Y';
 } | gdisk /dev/sda
-# 
+# format efi partition
+mkfs.fat -F32 /dev/sda1
+# format swap and activate
+mkswap /dev/sda2
+swapon /dev/sda2
+# format btrfs using force flag
+mkfs.btrfs /dev/sda3 -f
