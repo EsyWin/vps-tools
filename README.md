@@ -1,5 +1,7 @@
 # vps-tools
 
+Please don't copy/paste this at home, that's testing stuff for myself.
+
 useful one-liners to paste in your ssh
 
 ## Basic Sysadmin :
